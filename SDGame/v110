@@ -1,6 +1,6 @@
 def on_received_number(receivedNumber):
     global point
-    if radio.received_packet(RadioPacketProperty.SIGNAL_STRENGTH) < 50:
+    if radio.received_packet(RadioPacketProperty.SIGNAL_STRENGTH) > -60:
         music.play_tone(988, music.beat(BeatFraction.WHOLE))
         basic.show_leds("""
             . . . # .
