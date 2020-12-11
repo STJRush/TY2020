@@ -1,0 +1,34 @@
+def on_received_number(receivedNumber):
+    global point
+    if radio.received_packet(RadioPacketProperty.SIGNAL_STRENGTH) > -55:
+        music.play_tone(988, music.beat(BeatFraction.WHOLE))
+        basic.show_leds("""
+            . . . # .
+            . . # # .
+            # # . # .
+            . . . # .
+            . . # # #
+            """)
+        point += -1
+        basic.show_number(point)
+    radio.send_number(42)
+radio.on_received_number(on_received_number)
+
+def on_button_pressed_a():
+    radio.set_group(1)
+    basic.show_string("A")
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def on_button_pressed_ab():
+    while True:
+        radio.send_number(42)
+        basic.pause(1000)
+input.on_button_pressed(Button.AB, on_button_pressed_ab)
+
+def on_button_pressed_b():
+    radio.set_group(4)
+    basic.show_string("B")
+input.on_button_pressed(Button.B, on_button_pressed_b)
+
+point = 0
+point = 100
