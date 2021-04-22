@@ -1,0 +1,36 @@
+from firebase import firebase
+import datetime
+import serial
+import time
+
+FBConn = firebase.FirebaseApplication('https://man-to-man-defense-default-rtdb.europe-west1.firebasedatabase.app/', None)
+
+ser = serial.Serial()
+ser.baudrate = 115200
+ser.port = "com5"
+ser.open()
+
+
+while True:
+    microbitdata = str(ser.readline())
+    
+    temperature = microbitdata[2:]
+    temperature = temperature.replace(" ","")
+    temperature = temperature.replace("'","")
+    temperature = temperature.replace("\\r\\n","")
+    temperature = int(temperature)
+    
+    now = int(datetime.datetime.today().strftime("%Y%m%d%H%M%S"))
+    
+    data_to_upload = {
+        'Temp': temperature,
+        'Timestamp': now
+        }
+    
+    result = FBConn.post('/MyTestData/', data_to_upload)
+    
+    print (result)
+    
+    time.sleep(5)
+
+ser.close()
