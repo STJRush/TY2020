@@ -1,0 +1,19 @@
+def on_button_pressed_a():
+    radio.send_value("josh", 0)
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def on_received_value(name, value):
+    basic.show_string(name)
+    basic.show_number(value)
+radio.on_received_value(on_received_value)
+
+radio.set_group(2)
+serial.redirect(SerialPin.USB_TX, SerialPin.USB_RX, BaudRate.BAUD_RATE115200)
+serial.redirect_to_usb()
+
+def on_forever():
+    serial.write_number(input.temperature())
+    serial.write_line("")
+    basic.show_number(input.temperature())
+    basic.pause(5000)
+basic.forever(on_forever)
