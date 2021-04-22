@@ -1,0 +1,42 @@
+def on_button_pressed_a():
+    break
+    control.reset()
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def on_button_pressed_b():
+    radio.set_group(2)
+    radio.send_value("josh", points)
+input.on_button_pressed(Button.B, on_button_pressed_b)
+
+points = 0
+points = 100
+counter = 0
+radio.set_group(1)
+
+def on_forever():
+    global counter, points
+    for index in range(5):
+        radio.send_number(4)
+        if radio.received_packet(RadioPacketProperty.SIGNAL_STRENGTH) < -55:
+            basic.show_leds("""
+                . . . . .
+                . # . # .
+                . . . . .
+                # . . . #
+                . # # # .
+                """)
+            counter = 0
+            break
+        basic.pause(700)
+        counter += 1
+        basic.show_number(counter)
+        if counter >= 5:
+            points += -1
+            basic.show_leds("""
+                . . . # .
+                . . # # .
+                # # . # .
+                . . . # .
+                . . # # #
+                """)
+basic.forever(on_forever)
